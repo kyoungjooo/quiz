@@ -167,7 +167,7 @@ const group = posts.reduce((acc, cur) => {
   //author 기준으로 포스트를 그룹화하여 객체 형태로 반환하세요.
   //author 이름으로 기존의 키가 없으면 author 이름으로 키를 생성하고 현재의 post를 value에 추가한다.
   //현재 post.author 키가 같으면 기존 객체에 현재 객체를 추가한다.
-  !acc[cur.author] ? (acc[cur.author] = []) : acc[cur.author].push(cur);
+  !acc[cur.author] ? (acc[cur.author] = [cur]) : acc[cur.author].push(cur);
   return acc;
 }, {});
 console.log(group);
