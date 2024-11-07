@@ -26,3 +26,38 @@ const inc = counter();
 inc();
 inc();
 inc();
+
+class Counter {
+  #count = 0;
+  increase() {
+    this.#count++;
+    console.log(this.#count);
+  }
+}
+let counter1 = new Counter();
+counter1.increase();
+counter1.increase();
+
+function init() {
+  const name = "joo";
+  function displayName() {
+    console.log(name);
+  }
+  return displayName;
+}
+const myfunc = init();
+myfunc();
+
+function loop() {
+  const array = [];
+  for (let i = 0; i < 5; i++) {
+    array.push(function () {
+      console.log("i임", i);
+    });
+  }
+  return array;
+}
+const arr = loop();
+arr.forEach((func) => {
+  func();
+});
