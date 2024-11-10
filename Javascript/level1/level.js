@@ -45,6 +45,7 @@ function checkBankAccount(e) {
 //파싱하는 함수 앞 2자리와 맨끝 2자리를 제외하면 모두 ********로 나타내기
 //매개 변수로 현재 선택된 은행 value
 //마스킹처리된 계좌번호에 하이픈 넣기
+const ul = document.querySelector("#account-list");
 function maskingAccountNumber(AccNumber, accForm, currentBankVal) {
   const accountForm = accForm;
   let parsing = [...AccNumber];
@@ -52,5 +53,8 @@ function maskingAccountNumber(AccNumber, accForm, currentBankVal) {
   for (let i = 0; i < accountForm.length; i++) {
     if (accountForm[i] === "-") parsing.splice(i, 0, "-");
   }
-  console.log(`${BANK_LIST[currentBankVal]}:${parsing.join("")}`);
+  const result = `${BANK_LIST[currentBankVal]}:${parsing.join("")}`;
+  const li = document.createElement("li");
+  li.textContent = result;
+  ul.append(li);
 }
