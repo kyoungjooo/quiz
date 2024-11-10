@@ -38,12 +38,7 @@
       4. 아래의 입력창에 숫자가 입력되지 않도록 하고 길이 제한은 10자로 하시오.
       <br />숫자가 입력된다면 숫자가 입력되었다고 alert로 알려주시오
     </p>
-    <input
-      type="text"
-      id="te_input"
-      maxlength="9"
-      placeholder="글자만 입력하세요."
-    />
+    <input type="text" id="te_input" placeholder="글자만 입력하세요." />
 
     <p>
       5.아래의 입력창에 입력 후 저장 버튼을 누르거나 엔터키를 누르면 입력한
@@ -66,24 +61,32 @@
       const input = document.querySelector("#te_input");
       input.addEventListener("input", function (e) {
         const innerTxt = e.target.value;
+        console.log(innerTxt[innerTxt.length - 1]);
+        input.setAttribute("maxlength", 10);
         if (!isNaN(innerTxt[innerTxt.length - 1])) {
           alert("숫자는 입력할 수 없습니다.");
           input.value = innerTxt.slice(0, -1);
         }
-        if (innerTxt.length > 10) e.preventDefault();
+        if (innerTxt.length > 10) {
+          return;
+        }
       });
       //문제5
       const form = document.querySelector("#form");
       const list = document.querySelector("#list");
-      let isEditing = false;
+      const addBtns = `<input type="text" class="edit-list"/><button class="edit">수정</button><button class="remove">삭제</button>`;
 
       //추가된 내용 삭제 및 수정
-      [...list.children].forEach((el) => {
-        const btns = document.createElement("span");
-        btns.innerHTML = `<button class="edit">수정</button><button class="remove">삭제</button>`;
-        el.append(btns);
-      });
+      function addBtnsWrap() {
+        [...list.children].forEach((el) => {
+          const btns = document.createElement("span");
+          btns.innerHTML = addBtns;
+          el.append(btns);
+        });
+      }
+      addBtnsWrap();
 
+      //입력한 내용의 리스트를 추가
       form.addEventListener("submit", handleFormSubmit);
       function handleFormSubmit(e) {
         e.preventDefault();
@@ -94,7 +97,7 @@
         li.className = "liclass";
         list.append(li);
         const btns = document.createElement("span");
-        btns.innerHTML = `<button class="edit">수정</button><button class="remove">삭제</button>`;
+        btns.innerHTML = addBtns;
         li.appendChild(btns);
         list.appendChild(li);
         form.children[0].value = "";
@@ -105,23 +108,24 @@
       function handleResetList() {
         list.replaceChildren();
       }
+
       //삭제 수정
       const listData = document.querySelector("#list_data");
       list.addEventListener("click", handleDeleteList);
-
       function handleDeleteList(e) {
         const current = e.target;
-        const currParnet = current.parentNode.parentNode;
-        if (current.classList.contains("remove")) {
-          currParnet.remove();
-        }
+        const currParnet = current.closest("li");
+        if (current.classList.contains("remove")) currParnet.remove();
+
         //클릭한 버튼이 수정 버튼이면
-        //수정중이라는걸 알 수 있어야함 (버튼) edit= true
         //인풋에 입력한 내용이 수정 버튼을 누른 li에 수정된다.
         if (current.classList.contains("edit")) {
-          isEditing = true;
-          listData.focus();
-          listData.setAttribute("placeholder", "수정할 내용을 여기에 입력");
+          const currentInput = current.previousSibling;
+          currentInput.focus();
+          if (currentInput.value.length < 1) return;
+          currParnet.firstChild.textContent = currentInput.value;
+          currentInput.value = "";
+          currentInput.blur();
         }
       }
     </script>
