@@ -116,7 +116,9 @@ const BtnGroup = document.querySelector(".play_btn_group");
 const handleMusicPlay = (e) => {
   const current = e.target;
   const elbumBg = mainEl.querySelector(".blur");
+  currentBg = musicListData[bg].color;
   if (current.textContent === "P L A Y") {
+    settingBg(currentBg);
     isPlay = true;
     mainEl.append(elbumBg);
     elbumBg.style.background = `url(${musicListData[bg].src})`;
@@ -129,7 +131,6 @@ const handleMusicPlay = (e) => {
     isPlay = false;
     elbumBg.style.animation = "downToUp 1s forwards";
     disk.classList.remove("active");
-    currentBg = musicListData[bg].color;
     settingBg(currentBg);
     return;
   }
