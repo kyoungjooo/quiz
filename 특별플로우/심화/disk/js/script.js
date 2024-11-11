@@ -63,9 +63,12 @@ const musicListData = [
 const listWrap = document.querySelector(".list_btn_group");
 const ul = listWrap.querySelector("ul");
 const disk = document.querySelector(".disk");
+const diskInner = disk.querySelector(".disk_inner");
 const mainEl = document.querySelector("main");
 let imgEl;
 let bg;
+let isPlay = false;
+let currentBg;
 const settingElbumEls = () => {
   musicListData.forEach((elbum, i) => {
     const li = document.createElement("li");
@@ -98,31 +101,37 @@ const handleCurrentElbum = (e) => {
     if (bg < 0) bg = ul.children.length - 1;
   }
   [...ul.children][bg].classList.add("play");
-
-  let currentBg = musicListData[bg].color;
-  mainEl.style.background = `linear-gradient(120deg, ${currentBg[0]}, ${currentBg[1]})`;
+  if (isPlay) return;
+  currentBg = musicListData[bg].color;
+  settingBg(currentBg);
 };
 listWrap.addEventListener("click", handleCurrentElbum);
 
+function settingBg(currentBg) {
+  mainEl.style.background = `linear-gradient(120deg, ${currentBg[0]}, ${currentBg[1]})`;
+  diskInner.style.backgroundColor = currentBg[0];
+}
 //play버튼을 누르면 디스크에 .active 클래스를 추가
 const BtnGroup = document.querySelector(".play_btn_group");
 const handleMusicPlay = (e) => {
   const current = e.target;
   const elbumBg = mainEl.querySelector(".blur");
   if (current.textContent === "P L A Y") {
+    isPlay = true;
     mainEl.append(elbumBg);
     elbumBg.style.background = `url(${musicListData[bg].src})`;
+    elbumBg.style.backgroundSize = "cover";
+    elbumBg.style.backgroundRepeat = "no-repeat";
     elbumBg.style.animation = "upToDown 1s linear";
     disk.classList.add("active");
   }
   if (current.textContent === "S T O P") {
+    isPlay = false;
     elbumBg.style.animation = "downToUp 1s forwards";
     disk.classList.remove("active");
+    currentBg = musicListData[bg].color;
+    settingBg(currentBg);
     return;
   }
 };
 BtnGroup.addEventListener("click", handleMusicPlay);
-/* 
- const diskInner = disk.querySelector(".disk_inner");
-  diskInner.style.backgroundColor = currentBg[0];
-*/
