@@ -62,6 +62,8 @@ const musicListData = [
 //1. 리스트 앨범 보여주기
 const listWrap = document.querySelector(".list_btn_group");
 const ul = listWrap.querySelector("ul");
+const disk = document.querySelector(".disk");
+const mainEl = document.querySelector("main");
 let imgEl;
 let bg;
 const settingElbumEls = () => {
@@ -73,12 +75,14 @@ const settingElbumEls = () => {
   });
   imgEl = ul.querySelector("li.play").firstChild;
   bg = Number(imgEl.dataset.idx);
+  const elbumBg = document.createElement("div");
+  elbumBg.className = "blur";
+  elbumBg.style.opacity = "0";
 };
 window.addEventListener("load", settingElbumEls);
 
 //해당 앨범이 눌러지면 상위에 play클래스 추가, 배경 바꾸기
 const handleCurrentElbum = (e) => {
-  const mainEl = document.querySelector("main");
   const current = e.target;
   [...ul.children].forEach((li) => li.classList.remove("play"));
   if (current.tagName === "IMG") {
@@ -99,3 +103,26 @@ const handleCurrentElbum = (e) => {
   mainEl.style.background = `linear-gradient(120deg, ${currentBg[0]}, ${currentBg[1]})`;
 };
 listWrap.addEventListener("click", handleCurrentElbum);
+
+//play버튼을 누르면 디스크에 .active 클래스를 추가
+const BtnGroup = document.querySelector(".play_btn_group");
+const handleMusicPlay = (e) => {
+  const current = e.target;
+  const elbumBg = mainEl.querySelector(".blur");
+  if (current.textContent === "P L A Y") {
+    mainEl.append(elbumBg);
+    elbumBg.style.background = `url(${musicListData[bg].src})`;
+    elbumBg.style.animation = "upToDown 1s linear";
+    disk.classList.add("active");
+  }
+  if (current.textContent === "S T O P") {
+    elbumBg.style.animation = "downToUp 1s forwards";
+    disk.classList.remove("active");
+    return;
+  }
+};
+BtnGroup.addEventListener("click", handleMusicPlay);
+/* 
+ const diskInner = disk.querySelector(".disk_inner");
+  diskInner.style.backgroundColor = currentBg[0];
+*/
